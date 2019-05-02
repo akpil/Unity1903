@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    public float Speed;
     private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -19,10 +19,8 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        Debug.LogFormat("horizontal : {0}", horizontal.ToString());
-        float vertical = Input.GetAxis("Vertical");
-        rb.AddForce(new Vector3(horizontal, 0, vertical) * 10);
-        
+        float horizontal = Input.GetAxis("Horizontal") * Speed;
+        float vertical = Input.GetAxis("Vertical") * Speed;
+        rb.velocity = new Vector3(horizontal, 0, vertical);        
     }
 }
