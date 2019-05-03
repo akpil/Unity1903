@@ -23,4 +23,12 @@ public class Player : MonoBehaviour
         float vertical = Input.GetAxis("Vertical") * Speed;
         rb.velocity = new Vector3(horizontal, 0, vertical);        
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Pickup"))
+        {
+            Debug.Log("pickup  enter");
+        }
+    }
+
 }
