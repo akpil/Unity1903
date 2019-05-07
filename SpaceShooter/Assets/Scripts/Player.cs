@@ -8,9 +8,14 @@ public class Player : MonoBehaviour
     public float Speed;
     public float Tilt;
     public float xMin, xMax, zMin, zMax;
+    public Bolt boltPrefab;
+    public Transform boltPos;
+    public float FireRateBase;
+    private float FireRateCurrent;
     // Start is called before the first frame update
     void Start()
     {
+        FireRateCurrent = 0;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -26,5 +31,13 @@ public class Player : MonoBehaviour
         rb.position = new Vector3(Mathf.Clamp(rb.position.x, xMin, xMax),
                                   rb.position.y,
                                   Mathf.Clamp(rb.position.z, zMin, zMax));
+
+        if (Input.GetButton("Fire1") && FireRateCurrent <= 0)
+        {
+            Bolt newBolt = Instantiate(boltPrefab);
+            newBolt.transform.position = boltPos.position;
+            FireRateCurrent = FireRateBase;
+        }
+        FireRateCurrent -= Time.deltaTime;
     }
 }
