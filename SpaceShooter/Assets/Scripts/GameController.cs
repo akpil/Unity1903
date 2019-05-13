@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public AsteroidMovement[] asteroidPrefab;
+    public EnemyController enemyPrefab;
     public int AsteroidSpawnCount;
     public float SpawnPosXMin;
     public float SpawnPosXMax;
@@ -15,13 +16,12 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(SpawnHazard());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator SpawnHazard()
     {
-        if (currentSpawnTime <= 0)
+        while (true)
         {
             for (int i = 0; i < AsteroidSpawnCount; i++)
             {
@@ -30,10 +30,23 @@ public class GameController : MonoBehaviour
                 asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
                                                            0,
                                                            SpawnPosZ);
+                yield return new WaitForSeconds(SpawnTime);
             }
-            AsteroidSpawnCount += 2;
-            currentSpawnTime = SpawnTime;
+            for (int i = 0; i < 3; i++)
+            {
+                EnemyController enemy = Instantiate(enemyPrefab);
+                enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
+                                                           0,
+                                                           SpawnPosZ);
+                yield return new WaitForSeconds(SpawnTime);
+            }
+            yield return new WaitForSeconds(5);
         }
-        currentSpawnTime -= Time.deltaTime;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 }

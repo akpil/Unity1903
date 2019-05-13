@@ -40,4 +40,14 @@ public class Player : MonoBehaviour
         }
         FireRateCurrent -= Time.deltaTime;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            gameObject.SetActive(false);
+
+            // game over
+            Debug.Log("game over");
+        }
+    }
 }
