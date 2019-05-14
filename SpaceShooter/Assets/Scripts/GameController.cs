@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour
 {
     public AsteroidMovement[] asteroidPrefab;
     public EnemyController enemyPrefab;
-    public int AsteroidSpawnCount;
+    public int AsteroidSpawnCount, EnemySpawnCount;
     public float SpawnPosXMin;
     public float SpawnPosXMax;
     public float SpawnPosZ;
@@ -21,26 +21,61 @@ public class GameController : MonoBehaviour
 
     private IEnumerator SpawnHazard()
     {
+        int asteroidCount = AsteroidSpawnCount;
+        int enemyCount = EnemySpawnCount;
+        int rand;
         while (true)
         {
-            for (int i = 0; i < AsteroidSpawnCount; i++)
+            while (asteroidCount > 0 && enemyCount > 0)
             {
-                AsteroidMovement asteroid =
-                Instantiate(asteroidPrefab[Random.Range(0, asteroidPrefab.Length)]);
-                asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
-                                                           0,
-                                                           SpawnPosZ);
+                rand = Random.Range(0, 100);
+                Debug.Log(rand);
+                if (rand < 65) // Asteroid
+                {
+                    asteroidCount--;
+                    AsteroidMovement asteroid =
+                    Instantiate(asteroidPrefab[Random.Range(0, asteroidPrefab.Length)]);
+                    asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
+                                                               0,
+                                                               SpawnPosZ);
+                }
+                else // enemy
+                {
+                    enemyCount--;
+                    EnemyController enemy = Instantiate(enemyPrefab);
+                    enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
+                                                               0,
+                                                               SpawnPosZ);
+                }
                 yield return new WaitForSeconds(SpawnTime);
             }
-            for (int i = 0; i < 3; i++)
+            if (asteroidCount > 0)
             {
-                EnemyController enemy = Instantiate(enemyPrefab);
-                enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
-                                                           0,
-                                                           SpawnPosZ);
-                yield return new WaitForSeconds(SpawnTime);
+                for (int i = 0; i < asteroidCount; i++)
+                {
+                    AsteroidMovement asteroid =
+                    Instantiate(asteroidPrefab[Random.Range(0, asteroidPrefab.Length)]);
+                    asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
+                                                               0,
+                                                               SpawnPosZ);
+                    yield return new WaitForSeconds(SpawnTime);
+                }
             }
+            else
+            {
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    EnemyController enemy = Instantiate(enemyPrefab);
+                    enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
+                                                               0,
+                                                               SpawnPosZ);
+                    yield return new WaitForSeconds(SpawnTime);
+                }
+            }
+
             yield return new WaitForSeconds(5);
+            asteroidCount = AsteroidSpawnCount;
+            enemyCount = EnemySpawnCount;
         }
     }
 
