@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public float Speed;
     public float Tilt;
     public float xMin, xMax, zMin, zMax;
-    public Bolt boltPrefab;
+    public BoltPool boltPool;
     public Transform boltPos;
     public float FireRateBase;
     private float FireRateCurrent;
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetButton("Fire1") && FireRateCurrent <= 0)
         {
-            Bolt newBolt = Instantiate(boltPrefab);
+            Bolt newBolt = boltPool.GetFromPool();
             newBolt.transform.position = boltPos.position;
             FireRateCurrent = FireRateBase;
         }

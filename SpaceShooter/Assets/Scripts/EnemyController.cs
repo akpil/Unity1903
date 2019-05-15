@@ -8,12 +8,20 @@ public class EnemyController : MonoBehaviour
     public float Speed;
 
     public float fireRate;
-    public Bolt boltPrefab;
+    private BoltPool boltPool;
     public Transform boltPos;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+    }
+
+    public void SetBoltPool(BoltPool pool)
+    {
+        if (pool != null)
+        {
+            boltPool = pool;
+        }
     }
 
     private void OnEnable()
@@ -66,9 +74,10 @@ public class EnemyController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(fireRate);
-            Bolt bolt = Instantiate(boltPrefab, boltPos.position, boltPos.rotation);
+            Bolt bolt = boltPool.GetFromPool();
+            bolt.transform.position = boltPos.position;
+            bolt.transform.rotation = boltPos.rotation;
         }
-        
     }
 
     private void OnTriggerEnter(Collider other)

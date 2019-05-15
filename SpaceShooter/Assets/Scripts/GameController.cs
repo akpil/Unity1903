@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     public AsteroidMovement[] asteroidPrefab;
-    public EnemyController enemyPrefab;
+    public EnemyPool enemyPool;
     public int AsteroidSpawnCount, EnemySpawnCount;
     public float SpawnPosXMin;
     public float SpawnPosXMax;
@@ -42,7 +42,7 @@ public class GameController : MonoBehaviour
                 else // enemy
                 {
                     enemyCount--;
-                    EnemyController enemy = Instantiate(enemyPrefab);
+                    EnemyController enemy = enemyPool.GetFromPool();
                     enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
                                                                0,
                                                                SpawnPosZ);
@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour
             {
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    EnemyController enemy = Instantiate(enemyPrefab);
+                    EnemyController enemy = enemyPool.GetFromPool();
                     enemy.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
                                                                0,
                                                                SpawnPosZ);
