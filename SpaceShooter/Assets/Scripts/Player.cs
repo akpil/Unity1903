@@ -37,15 +37,27 @@ public class Player : MonoBehaviour
             Bolt newBolt = boltPool.GetFromPool();
             newBolt.transform.position = boltPos.position;
             FireRateCurrent = FireRateBase;
+            SoundController.instance.PlayEffectSound((int)eSoundEffectID.FirePlayer);
         }
         FireRateCurrent -= Time.deltaTime;
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            SoundController.instance.ToggleEffectSound(true);
+        }
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SoundController.instance.ToggleEffectSound(false);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
-
+            Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.PlayerExp);
+            effect.transform.position = transform.position;
+            SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpPlayer);
             // game over
             Debug.Log("game over");
         }

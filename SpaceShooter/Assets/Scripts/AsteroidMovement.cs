@@ -32,6 +32,9 @@ public class AsteroidMovement : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             gameObject.SetActive(false);
+            Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.AsteroidExp);
+            effect.transform.position = transform.position;
+            SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpAst);
         }
     }
     

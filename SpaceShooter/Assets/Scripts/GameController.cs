@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public AsteroidMovement[] asteroidPrefab;
+    public AsteroidPool asteroidPool;
     public EnemyPool enemyPool;
     public int AsteroidSpawnCount, EnemySpawnCount;
     public float SpawnPosXMin;
@@ -33,8 +33,7 @@ public class GameController : MonoBehaviour
                 if (rand < 65) // Asteroid
                 {
                     asteroidCount--;
-                    AsteroidMovement asteroid =
-                    Instantiate(asteroidPrefab[Random.Range(0, asteroidPrefab.Length)]);
+                    AsteroidMovement asteroid = asteroidPool.GetFromPool(Random.Range(0, 3));
                     asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
                                                                0,
                                                                SpawnPosZ);
@@ -53,8 +52,7 @@ public class GameController : MonoBehaviour
             {
                 for (int i = 0; i < asteroidCount; i++)
                 {
-                    AsteroidMovement asteroid =
-                    Instantiate(asteroidPrefab[Random.Range(0, asteroidPrefab.Length)]);
+                    AsteroidMovement asteroid = asteroidPool.GetFromPool(Random.Range(0, 3));
                     asteroid.transform.position = new Vector3(Random.Range(SpawnPosXMin, SpawnPosXMax),
                                                                0,
                                                                SpawnPosZ);

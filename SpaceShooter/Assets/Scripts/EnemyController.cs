@@ -77,6 +77,7 @@ public class EnemyController : MonoBehaviour
             Bolt bolt = boltPool.GetFromPool();
             bolt.transform.position = boltPos.position;
             bolt.transform.rotation = boltPos.rotation;
+            SoundController.instance.PlayEffectSound((int)eSoundEffectID.FireEnemy);
         }
     }
 
@@ -86,6 +87,9 @@ public class EnemyController : MonoBehaviour
         {
             other.gameObject.SetActive(false);
             gameObject.SetActive(false);
+            Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.EnemyExp);
+            effect.transform.position = transform.position;
+            SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpEnemy);
         }
     }
 }
