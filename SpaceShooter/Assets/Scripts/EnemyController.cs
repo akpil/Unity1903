@@ -10,7 +10,8 @@ public class EnemyController : MonoBehaviour
     public float fireRate;
     private BoltPool boltPool;
     public Transform boltPos;
-
+    private GameController controller;
+    public int KillScore = 10;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -90,6 +91,12 @@ public class EnemyController : MonoBehaviour
             Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.EnemyExp);
             effect.transform.position = transform.position;
             SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpEnemy);
+            if (controller == null)
+            {
+                GameObject a = GameObject.FindGameObjectWithTag("GameController");
+                controller = a.GetComponent<GameController>();
+            }
+            controller.AddScore(KillScore);
         }
     }
 }

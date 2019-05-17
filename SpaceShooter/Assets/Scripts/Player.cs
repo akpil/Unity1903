@@ -12,11 +12,13 @@ public class Player : MonoBehaviour
     public Transform boltPos;
     public float FireRateBase;
     private float FireRateCurrent;
+    private GameController controller;
     // Start is called before the first frame update
     void Start()
     {
         FireRateCurrent = 0;
         rb = GetComponent<Rigidbody>();
+        controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
     }
 
     // Update is called once per frame
@@ -40,15 +42,6 @@ public class Player : MonoBehaviour
             SoundController.instance.PlayEffectSound((int)eSoundEffectID.FirePlayer);
         }
         FireRateCurrent -= Time.deltaTime;
-
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            SoundController.instance.ToggleEffectSound(true);
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            SoundController.instance.ToggleEffectSound(false);
-        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -58,8 +51,7 @@ public class Player : MonoBehaviour
             Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.PlayerExp);
             effect.transform.position = transform.position;
             SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpPlayer);
-            // game over
-            Debug.Log("game over");
+            controller.GameOver();
         }
     }
 }

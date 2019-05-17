@@ -7,6 +7,8 @@ public class AsteroidMovement : MonoBehaviour
     private Rigidbody rb;
     public float Speed;
     public float Tumble;
+    private GameController controller;
+    public int KillScore = 1;
 
     private void Awake()
     {
@@ -35,6 +37,12 @@ public class AsteroidMovement : MonoBehaviour
             Timer effect = EffectPool.instance.GetFromPool((int)eEffectType.AsteroidExp);
             effect.transform.position = transform.position;
             SoundController.instance.PlayEffectSound((int)eSoundEffectID.ExpAst);
+            if (controller == null)
+            {
+                GameObject a = GameObject.FindGameObjectWithTag("GameController");
+                controller = a.GetComponent<GameController>();
+            }
+            controller.AddScore(KillScore);
         }
     }
     

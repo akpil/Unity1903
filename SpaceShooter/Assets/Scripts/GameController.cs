@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    public BGScroller[] BGs;
+    public float BGSpeed = 1;
     public AsteroidPool asteroidPool;
     public EnemyPool enemyPool;
     public int AsteroidSpawnCount, EnemySpawnCount;
@@ -11,12 +14,28 @@ public class GameController : MonoBehaviour
     public float SpawnPosXMax;
     public float SpawnPosZ;
 
+    private Coroutine SpawnRoutine;
+
     public float SpawnTime;
     private float currentSpawnTime;
+    public int Score;
+    public UIController ui;
+    public Player player;
+
+    private bool isGameOver;
+
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnHazard());
+        SpawnRoutine = StartCoroutine(SpawnHazard());
+        for (int i = 0; i < BGs.Length; i++)
+        {
+            BGs[i].SetScrollSpeed(BGSpeed);
+        }
+        Score = 0;
+        isGameOver = false;
+        ui.ShowScore(Score);
+        ui.ShowMessage("");
     }
 
     private IEnumerator SpawnHazard()
@@ -77,9 +96,51 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void GameOver()
     {
-        
+        ui.ShowMessage("Game over");
+        for (int i = 0; i < BGs.Length; i++)
+        {
+            BGs[i].SetScrollSpeed(0);
+        }
+        StopCoroutine(SpawnRoutine);
+        Invoke("SetGameOverTrue", 5);
+    }
+
+    private void SetGameOverTrue()
+    {
+        isGameOver = true;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
+        return;
+        isGameOver = false;
+        player.transform.position = Vector3.zero;
+        player.gameObject.SetActive(true);
+
+        SpawnRoutine = StartCoroutine(SpawnHazard());
+        for (int i = 0; i < BGs.Length; i++)
+        {
+            BGs[i].SetScrollSpeed(BGSpeed);
+        }
+        Score = 0;
+        ui.ShowScore(Score);
+        ui.ShowMessage("");
+    }
+
+    public void AddScore(int amount)
+    {
+        Score += amount;
+        ui.ShowScore(Score);
+    }
+
+    private void Update()
+    {
+        if (isGameOver && Input.GetKeyDown(KeyCode.R))
+        {
+            RestartGame();
+        }
     }
 }
