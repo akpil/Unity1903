@@ -5,10 +5,33 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Animator anim;
+    private float Atk, CurrentHP;
+    [SerializeField]
+    private float MaxHPx;
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+    }
+
+    public void Init()
+    {
+        CurrentHP = MaxHPx;
+        Atk = 1;
+    }
+
+    public void Hit(float damage)
+    {
+        CurrentHP -= damage;
+        if (CurrentHP <= 0)
+        {
+            anim.SetBool(AnimHash.Dead, true);
+        }        
+    }
+
+    public float GetDamage()
+    {
+        return Atk;
     }
 
     // Update is called once per frame
@@ -31,4 +54,5 @@ public class Player : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
+    
 }

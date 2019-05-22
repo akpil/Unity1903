@@ -7,18 +7,32 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rb2d;
     private Animator anim;
     private eEnemyState enemystate;
-    private float speed;
+
+    [Header("Data")]
+    [Range(0, 10)]
+    [SerializeField]
+    private float Speed;
+    [SerializeField]
+    private float MaxHP, Atk;
+    private float currentHP;
+
+    private Player target;
+    private GameObject targetObj;
+
     // Start is called before the first frame update
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        speed = 1;
     }
 
     private void OnEnable()
     {
+        currentHP = MaxHP;
         enemystate = eEnemyState.Idle;
+        anim.SetBool(AnimHash.Walk, false);
+        anim.SetBool(AnimHash.Attack, false);
+        anim.SetBool(AnimHash.Dead, false);
         StartCoroutine(EnemyState());
     }
 
@@ -36,17 +50,49 @@ public class EnemyController : MonoBehaviour
                     break;
                 case eEnemyState.Move:
                     anim.SetBool(AnimHash.Walk, true);
-                    rb2d.velocity = transform.right * speed;
+                    rb2d.velocity = transform.right * Speed;
                     enemystate = eEnemyState.Idle;
+                    break;
+                case eEnemyState.Attack:
+                    anim.SetBool(AnimHash.Walk, false);
+                    anim.SetBool(AnimHash.Attack, true);
+                    rb2d.velocity = Vector2.zero;
+                    break;
+                case eEnemyState.Dead:
                     break;
             }
             yield return oneSec;
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AttackFinish()
     {
-        
+        anim.SetBool(AnimHash.Attack, false);
+    }
+
+    public void AttackTarget()
+    {
+        target.Hit(Atk);
+        //targetObj.SendMessage("Hit", Atk);
+    }
+
+    public void Hit(float damage)
+    {
+        currentHP -= damage;
+        if (currentHP <= 0)
+        {
+            enemystate = eEnemyState.Dead;
+            anim.SetBool(AnimHash.Dead, true);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            enemystate = eEnemyState.Attack;
+            target = collision.gameObject.GetComponent<Player>();
+            //targetObj = collision.gameObject;
+        }
     }
 }
