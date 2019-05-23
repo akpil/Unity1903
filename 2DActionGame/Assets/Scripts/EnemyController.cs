@@ -28,11 +28,19 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
-        currentHP = MaxHP;
-        enemystate = eEnemyState.Idle;
         anim.SetBool(AnimHash.Walk, false);
         anim.SetBool(AnimHash.Attack, false);
         anim.SetBool(AnimHash.Dead, false);
+    }
+
+    public void SetupData(float _HP = -1)
+    {
+        if (_HP > 0)
+        {
+            MaxHP = _HP;
+        }        
+        currentHP = MaxHP;
+        enemystate = eEnemyState.Idle;
         StartCoroutine(EnemyState());
     }
 
@@ -83,6 +91,7 @@ public class EnemyController : MonoBehaviour
         {
             enemystate = eEnemyState.Dead;
             anim.SetBool(AnimHash.Dead, true);
+            GameController.instance.AddKillCount();
         }
     }
 

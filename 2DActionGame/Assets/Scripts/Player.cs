@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private float Atk, CurrentHP;
     [SerializeField]
-    private float MaxHPx;
+    private float MaxHP;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +16,14 @@ public class Player : MonoBehaviour
 
     public void Init()
     {
-        CurrentHP = MaxHPx;
+        CurrentHP = MaxHP;
         Atk = 1;
     }
 
     public void Hit(float damage)
     {
         CurrentHP -= damage;
+        BattleUIController.instance.ShowHP(CurrentHP, MaxHP);
         if (CurrentHP <= 0)
         {
             anim.SetBool(AnimHash.Dead, true);
