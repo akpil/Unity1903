@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        Init();
     }
 
     public void Init()
