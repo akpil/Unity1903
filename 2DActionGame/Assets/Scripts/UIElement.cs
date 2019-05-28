@@ -17,6 +17,11 @@ public class UIElement : MonoBehaviour
         
     }
 
+    public void Level1UP(int id)
+    {
+        LobbyUIController.instance.LevelUP(id, 1);
+    }
+
     public void InitElement(Sprite icon, string title, string contents)
     {
         Icon.sprite = icon;

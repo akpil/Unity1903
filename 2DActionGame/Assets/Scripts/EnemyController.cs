@@ -16,6 +16,9 @@ public class EnemyController : MonoBehaviour
     private float MaxHP, Atk;
     private float currentHP;
 
+    [SerializeField]
+    private Transform hpBarPos;
+
     private Player target;
     private GameObject targetObj;
 
