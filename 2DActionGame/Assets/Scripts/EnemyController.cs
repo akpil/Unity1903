@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
 
     private Player target;
     private GameObject targetObj;
-
+    private EnemyHPBar hpBar;
     // Start is called before the first frame update
     void Awake()
     {
@@ -34,6 +34,15 @@ public class EnemyController : MonoBehaviour
         anim.SetBool(AnimHash.Walk, false);
         anim.SetBool(AnimHash.Attack, false);
         anim.SetBool(AnimHash.Dead, false);
+        hpBar = HPBarPool.instance.GetFromPool();
+    }
+
+    private void Update()
+    {
+        //over-ray
+        //hpBar.transform.position = Camera.main.WorldToScreenPoint(hpBarPos.position);
+        //camera
+        hpBar.transform.position = hpBarPos.position;
     }
 
     public void SetupData(float _HP = -1)
@@ -90,11 +99,13 @@ public class EnemyController : MonoBehaviour
     public void Hit(float damage)
     {
         currentHP -= damage;
+        hpBar.ShowGauge(currentHP, MaxHP);
         if (currentHP <= 0)
         {
             enemystate = eEnemyState.Dead;
             anim.SetBool(AnimHash.Dead, true);
             GameController.instance.AddKillCount();
+            hpBar.gameObject.SetActive(false);
         }
     }
 

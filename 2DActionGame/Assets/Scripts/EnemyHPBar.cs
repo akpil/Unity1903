@@ -7,16 +7,14 @@ public class EnemyHPBar : MonoBehaviour
 {
     [SerializeField]
     private Image Gauge;
-
-    // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
-        
+        Gauge.fillAmount = 1;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShowGauge(float current, float max)
     {
-        
+        Gauge.fillAmount = current / max;
+
     }
 }

@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
     {
         int maleFemale = 0;
         int rightLeft = 0;
-        WaitForSeconds waitinTime = new WaitForSeconds(0.7f);
+        WaitForSeconds waitinTime = new WaitForSeconds(30f);
         while (true)
         {
             maleFemale = Random.Range(0, 2);
