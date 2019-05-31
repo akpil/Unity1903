@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class TouchManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject dummyEffect;
     private Camera mainCamera;
     // Start is called before the first frame update
     void Start()
@@ -37,7 +35,7 @@ public class TouchManager : MonoBehaviour
             {
                 if (hit.collider.gameObject == gameObject)
                 {
-                    GameObject effect = Instantiate(dummyEffect);
+                    Timer effect = TouchEffectPool.instance.GetFromPool(0);
                     effect.transform.position = hit.point;
                     
                 }
@@ -68,9 +66,8 @@ public class TouchManager : MonoBehaviour
                     {
                         if (hit.collider.gameObject == gameObject)
                         {
-                            GameObject effect = Instantiate(dummyEffect);
+                            Timer effect = TouchEffectPool.instance.GetFromPool(0);
                             effect.transform.position = hit.point;
-                            Debug.Log(hit.point);
                             return true;
                         }
                     }
