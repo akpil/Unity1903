@@ -5,10 +5,16 @@ using UnityEngine;
 public class TouchManager : MonoBehaviour
 {
     private Camera mainCamera;
+    private Delegates.Void touchFunction;
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
+    }
+
+    public void SetTouchFunction(Delegates.Void callback)
+    {
+        touchFunction = callback;
     }
 
     private Ray GenerateRay(Vector3 ScreenVector)
@@ -37,14 +43,14 @@ public class TouchManager : MonoBehaviour
                 {
                     Timer effect = TouchEffectPool.instance.GetFromPool(0);
                     effect.transform.position = hit.point;
-                    
+                    GameController.instance.Touch();
                 }
             }            
         }
 #endif
         if (Touch())
         {
-
+            GameController.instance.Touch();
         }
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE_OSX
         

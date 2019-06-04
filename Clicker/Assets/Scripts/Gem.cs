@@ -8,28 +8,38 @@ public class Gem : MonoBehaviour
     [SerializeField]
     private Sprite[] Sprites;
     private int currentIndex;
+    private bool isFinish;
 
     // Start is called before the first frame update
     void Awake()
     {
+        
         renderer = GetComponent<SpriteRenderer>();
         currentIndex = 0;
     }
 
-    public void ShowProgress(float current, float max)
+    private void OnEnable()
     {
-        float progressRate =  current / max;
-        float progressBase = 1f / Sprites.Length;
+        isFinish = false;
+        currentIndex = 0;
+        renderer.sprite = Sprites[currentIndex];
+    }
 
-        if (progressRate >= 1)
-        {
-            gameObject.SetActive(false);
-        }
+    public void ShowProgress(float prograss)
+    {
+        float percent = prograss * 100;
+        float phaseShiftTarget = 20 * (1 + currentIndex);
 
-        if ((currentIndex + 1) * progressBase < progressRate && progressRate < 1)
+        if (!isFinish && percent >= phaseShiftTarget)
         {
             currentIndex++;
             renderer.sprite = Sprites[currentIndex];
+            
+            if (currentIndex >= Sprites.Length - 1)
+            {
+                isFinish = true;
+            }
         }
+
     }
 }

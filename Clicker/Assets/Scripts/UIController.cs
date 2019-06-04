@@ -5,9 +5,27 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    public static UIController instance;
     public static int WindowOpen = Animator.StringToHash("IsOpened");    
     [SerializeField]
     private Animator[] WindowsAnimArr;
+
+    [SerializeField]
+    private Text progressText;
+    [SerializeField]
+    private Image progressBar;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +41,12 @@ public class UIController : MonoBehaviour
         //                                                });
         //}
         
+    }
+
+    public void ShowProgress(float progress)
+    {
+        progressBar.fillAmount = progress;
+        progressText.text = progress.ToString("P0");
     }
 
     public void OpenWindow(int id)
