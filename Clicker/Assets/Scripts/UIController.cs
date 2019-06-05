@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     public static UIController instance;
-    public static int WindowOpen = Animator.StringToHash("IsOpened");    
+     
     [SerializeField]
     private Animator[] WindowsAnimArr;
 
@@ -51,10 +51,10 @@ public class UIController : MonoBehaviour
 
     public void OpenWindow(int id)
     {
-        WindowsAnimArr[id].SetBool(WindowOpen, true);
+        WindowsAnimArr[id].SetBool(AnimHash.WindowOpen, true);
     }
     public void CloseWindow(int id)
     {
-        WindowsAnimArr[id].SetBool(WindowOpen, false);
+        WindowsAnimArr[id].SetBool(AnimHash.WindowOpen, false);
     }
 }
